@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Caelis:Rima AOD</title>
+
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" charset="utf-8">
+
+     function httpGet(theUrl)
+    {
+	    var xmlHttp = null;
+
+	    xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open( "GET", theUrl, false );
+	    xmlHttp.send( null );
+	    return xmlHttp.responseText;
+    }
+    
+    // Wait for Cordova to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // Cordova is ready
+    //
+    function onDeviceReady() {
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    }
+
+    // onSuccess Geolocation
+    //
+    function onSuccess(position) {
+        var element = document.getElementById('geolocation');
+        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+                            'Longitude: '          + position.coords.longitude             + '<br />' +
+                            'Altitude: '           + position.coords.altitude              + '<br />' +
+                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
+                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                            'Heading: '            + position.coords.heading               + '<br />' +
+                            'Speed: '              + position.coords.speed                 + '<br />' +
+                            'Timestamp: '          + position.timestamp                    + '<br />';
+                            
+        // Get AOD
+        var aodelement = document.getElementById('aod');
+        var aodjson=httpGet('http://www.caelis.uva.es/rima/aod/near/'+position.coords.latitude+'/'+position.coords.longitude);
+        if(aodjson=='[]'){
+        	aodelement.innerHTML='There are not near stations with recently aod measures';
+        }else{	
+               aodelement.innerHTML=aodjson;
+        }
+    }
+
+    // onError Callback receives a PositionError object
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' +
+                'message: ' + error.message + '\n');
+    }
+
+    </script>
+  </head>
+  <body>
+    <p id="geolocation">Finding geolocation...</p><br />
+    <p id="aod">Finding near AOD value...</p>
+  </body>
+</html>
