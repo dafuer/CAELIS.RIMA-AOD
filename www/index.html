@@ -13,34 +13,36 @@
 
     // Cordova is ready
     function onDeviceReady() {
+        document.getElementById('domGeolocation').innerHTML='Finding geolocation... Please wait (It require gps or internet connection)';
+        document.getElementById('domAod').innerHTML='Finding near AOD value... Please wait (It require an active internet connection)';
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 
     // onSuccess Geolocation
     function onSuccess(position) {
-        var element = document.getElementById('geolocation');
+        var element = document.getElementById('domGeolocation');
         element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
                             'Longitude: '          + position.coords.longitude             + '<br />' +
-                            'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            'Heading: '            + position.coords.heading               + '<br />' +
-                            'Speed: '              + position.coords.speed                 + '<br />' +
-                            'Timestamp: '          + position.timestamp                    + '<br />';
+                            //'Altitude: '           + position.coords.altitude              + '<br />' +
+                            'Accuracy: '           + position.coords.accuracy              + 'm<br />' ; //+
+                            //'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                            //'Heading: '            + position.coords.heading               + '<br />' +
+                            //'Speed: '              + position.coords.speed                 + '<br />' +
+                            //'Timestamp: '          + position.timestamp                    + '<br />';
                             
         // Update a map
-        $('#geolocation').append('<img src="https://maps.googleapis.com/maps/api/staticmap?center='+position.coords.latitude+','+position.coords.longitude+'&amp;zoom=14&amp;size=288x200&amp;markers='+position.coords.latitude+','+position.coords.longitude+'&amp;sensor=false" width="288" height="200" ></img>');
+        $('#domGooglemap').html('<img src="https://maps.googleapis.com/maps/api/staticmap?center='+position.coords.latitude+','+position.coords.longitude+'&amp;zoom=14&amp;size=288x200&amp;markers='+position.coords.latitude+','+position.coords.longitude+'&amp;sensor=false" width="288" height="200" ></img>');
         
         // Get AOD
         $.getJSON(
             'http://www.caelis.uva.es/rima/aod/near/'+position.coords.latitude+'/'+position.coords.longitude, 
             function(data) {
-                var aodelement = document.getElementById('aod');
+                var aodelement = document.getElementById('domAod');
 
                 if(data.ph===undefined){
                     aodelement.innerHTML='There are not near stations with recently aod measures';
                 }else{
-                    aodelement.innerHTML='AOD: '        + data.aod              + '<br />' +
+                    aodelement.innerHTML='<b>AOD: '        + data.aod              + '</b><br />' +
                                         'Photometer: '  + data.ph               + '<br />' +
                                         'Dispersion: '  + data.dispersion       + '<br />' +
                                         'Measured on: ' + data.triplet_date +' ('+data.time+' hours ago)'   + '<br />' +
@@ -69,9 +71,10 @@
                 </h3>
             </div>
             <div data-role="content">
-    <p id="geolocation">Finding geolocation...</p><br />
-    <p id="aod">Finding near AOD value...</p>                
-                
+                <p id="domGeolocation">Finding geolocation... Please wait (It require gps or internet connection)</p>
+                <p id="domAod">Finding near AOD value... Please wait (It require an active internet connection)</p>                
+                <span id="domGooglemap"></span>
+                <a style="position: fixed;bottom: -5px; left: 0px; width: 100%" data-role="button" onclick="onDeviceReady();">refresh</a>
             </div>
         </div>      
   </body>
