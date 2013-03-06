@@ -3,9 +3,10 @@
   <head>
     <title>Caelis:Rima AOD</title>
 
-<link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
-<script src="js/jquery-1.9.1.min.js"></script>
-<script src="js/jquery.mobile-1.3.0.min.js"></script>    
+    <link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
+    
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/jquery.mobile-1.3.0.min.js"></script>    
     <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" charset="utf-8">
     // Wait for Cordova to load
@@ -13,18 +14,17 @@
 
     // Cordova is ready
     function onDeviceReady() {
-        document.getElementById('domGeolocation').innerHTML='Finding geolocation... Please wait (It require gps or internet connection)';
-        document.getElementById('domAod').innerHTML='Finding near AOD value... Please wait (It require an active internet connection)';
+        $('#domGeolocation').html('Finding geolocation... Please wait (It require gps or internet connection)');
+        $('#domAod').html('Finding near AOD value... Please wait (It require an active internet connection)');
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
 
     // onSuccess Geolocation
     function onSuccess(position) {
-        var element = document.getElementById('domGeolocation');
-        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
+        $('#domGeolocation').html('Latitude: '           + position.coords.latitude              + '<br />' +
                             'Longitude: '          + position.coords.longitude             + '<br />' +
                             //'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + 'm<br />' ; //+
+                            'Accuracy: '           + position.coords.accuracy              + 'm<br />' ); //+
                             //'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
                             //'Heading: '            + position.coords.heading               + '<br />' +
                             //'Speed: '              + position.coords.speed                 + '<br />' +
@@ -37,18 +37,16 @@
         $.getJSON(
             'http://www.caelis.uva.es/rima/aod/near/'+position.coords.latitude+'/'+position.coords.longitude, 
             function(data) {
-                var aodelement = document.getElementById('domAod');
-
                 if(data.ph===undefined){
-                    aodelement.innerHTML='There are not near stations with recently aod measures';
+                    $('#domAod').html('There are not near stations with recently aod measures');
                 }else{
-                    aodelement.innerHTML='<b>AOD: '        + data.aod              + '</b><br />' +
+                    $('#domAod').html('<b>AOD: '        + data.aod              + '</b><br />' +
                                         'Photometer: '  + data.ph               + '<br />' +
                                         'Dispersion: '  + data.dispersion       + '<br />' +
                                         'Measured on: ' + data.triplet_date +' ('+data.time+' hours ago)'   + '<br />' +
                                         'Station: '     + data.station          + '<br />' +
                                         'Distance: '    + data.distance         + 'Km <br />' +
-                                        'Altitude: '    + data.elevation        + 'm'       ;
+                                        'Altitude: '    + data.elevation        + 'm'       );
                 }
             }
         );        
@@ -58,24 +56,24 @@
     //
     function onError(error) {
         alert('code: '    + error.code    + '\n' +
-                'message: ' + error.message + '\n');
+              'message: ' + error.message + '\n');
     }
 
     </script>
-  </head>
-  <body>
-<div data-role="page" id="page1">
-            <div data-theme="b" data-role="header">
-                <h3>
-                    CAELIS - RIMA
-                </h3>
-            </div>
-            <div data-role="content">
-                <p id="domGeolocation">Finding geolocation... Please wait (It require gps or internet connection)</p>
-                <p id="domAod">Finding near AOD value... Please wait (It require an active internet connection)</p>                
-                <span id="domGooglemap"></span>
-                <a style="position: fixed;bottom: -5px; left: 0px; width: 100%" data-role="button" onclick="onDeviceReady();">refresh</a>
-            </div>
-        </div>      
-  </body>
+</head>
+<body>
+    <div data-role="page" id="page1">
+        <div data-theme="b" data-role="header">
+            <h3>
+                CAELIS - RIMA
+            </h3>
+        </div>
+        <div data-role="content">
+            <p id="domGeolocation">Finding geolocation... Please wait (It require gps or internet connection)</p>
+            <p id="domAod">Finding near AOD value... Please wait (It require an active internet connection)</p>                
+            <span id="domGooglemap"></span>
+            <a style="position: fixed;bottom: -5px; left: 0px; width: 100%" data-role="button" onclick="onDeviceReady();">refresh</a>
+        </div>
+    </div>      
+</body>
 </html>
