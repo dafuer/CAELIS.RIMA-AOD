@@ -21,17 +21,20 @@
 
     // onSuccess Geolocation
     function onSuccess(position) {
-        $('#domGeolocation').html('Latitude: '           + position.coords.latitude              + '<br />' +
+        /*$('#domGeolocation').html('Latitude: '           + position.coords.latitude              + '<br />' +
                             'Longitude: '          + position.coords.longitude             + '<br />' +
-                            //'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + 'm<br />' ); //+
-                            //'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            //'Heading: '            + position.coords.heading               + '<br />' +
-                            //'Speed: '              + position.coords.speed                 + '<br />' +
-                            //'Timestamp: '          + position.timestamp                    + '<br />';
-                            
+                            'Altitude: '           + position.coords.altitude              + '<br />' +
+                            'Accuracy: '           + position.coords.accuracy              + 'm<br />'+
+                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
+                            'Heading: '            + position.coords.heading               + '<br />' +
+                            'Speed: '              + position.coords.speed                 + '<br />' +
+                            'Timestamp: '          + position.timestamp                    + '<br />');*/
+        
+        $('#domGeolocation').html('');              
+        
         // Update a map
-        $('#domGooglemap').html('<img src="https://maps.googleapis.com/maps/api/staticmap?center='+position.coords.latitude+','+position.coords.longitude+'&amp;zoom=14&amp;size=288x200&amp;markers='+position.coords.latitude+','+position.coords.longitude+'&amp;sensor=false" width="288" height="200" ></img>');
+        $('#domGooglemap').html('<img src="https://maps.googleapis.com/maps/api/staticmap?center='+position.coords.latitude+','+position.coords.longitude+'&amp;zoom=14&amp;size=288x200&amp;markers='+position.coords.latitude+','+position.coords.longitude+'&amp;sensor=false" width="288" height="200" ></img>'+
+            '<p>Coords: '+position.coords.latitude.toFixed(2)+','+position.coords.longitude.toFixed(2)+' &plusmn; '+position.coords.accuracy+'m</p>');
         
         // Get AOD
         $.getJSON(
@@ -40,13 +43,19 @@
                 if(data.ph===undefined){
                     $('#domAod').html('There are not near stations with recently aod measures');
                 }else{
-                    $('#domAod').html('<b>AOD: '        + data.aod              + '</b><br />' +
+                    /*$('#domAod').html('<b>AOD: '        + data.aod              + '</b><br />' +
                                         'Photometer: '  + data.ph               + '<br />' +
                                         'Dispersion: '  + data.dispersion       + '<br />' +
                                         'Measured on: ' + data.triplet_date +' ('+data.time+' hours ago)'   + '<br />' +
                                         'Station: '     + data.station          + '<br />' +
                                         'Distance: '    + data.distance         + 'Km <br />' +
-                                        'Altitude: '    + data.elevation        + 'm'       );
+                                        'Altitude: '    + data.elevation        + 'm'       );*/
+                    $('#domAod').html('<b style="font-size: large;">AOD: '        + data.aod              + '</b><br /><br />' +
+                                        data.time+' hours ago'   + '<br />' +
+                                        'in '     + data.station       + 
+                                         ' ('    + data.distance         + 'Km) <br />'     +
+                                        'by #'  + data.ph               );
+                                          
                 }
             }
         );        
