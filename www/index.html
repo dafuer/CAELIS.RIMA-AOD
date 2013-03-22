@@ -16,7 +16,7 @@
     function onDeviceReady() {
         $('#domGeolocation').html('Finding geolocation... Please wait (It require gps or internet connection)');
         $('#domAod').html('Finding near AOD value... Please wait (It require an active internet connection)');
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        navigator.geolocation.getCurrentPosition(onSuccess, onError, { enableHighAccuracy: true });
     }
 
     // onSuccess Geolocation
