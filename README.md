@@ -1,4 +1,4 @@
-CAELIS: RIMA - ODA
+CAELIS: RIMA - AOD
 =================
 
 Small example of PhoneGap technology. This little tool can be compiled to run on a lot of mobile OS's.
